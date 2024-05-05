@@ -2,72 +2,80 @@ import java.util.*;
 
 public class UniformCostSearch implements WordLadderSolver {
 
+    // Calculation Tools
     private final WordGenerator wg;
     private final WordSet   dict;
-    private String end;
-    private final Queue<AbstractMap.SimpleEntry<List<String>, Double>> theQueue;
-    private boolean done;
-    private List<String> solution;
 
-    public UniformCostSearch(String dictPath){
+    // State Objects
+    private String end;
+    private boolean done;
+    private final PriorityQueue<Pair<List<String>, Double>> theQueue;
+    private final HashSet<String> visited;
+
+    // Solution Object
+    private List<String> solution;
+    private Integer visitedNode;
+    private Long elapsedTime;
+
+    public UniformCostSearch(){
         wg = new WordGenerator();
         dict = new WordSet();
-        dict.loadFile(dictPath);
-        theQueue = new LinkedList<>();
+        theQueue = new PriorityQueue<>();
+        visited = new HashSet<>();
     }
 
-    public List<String> solve(String start, String end){
+    public void solve(String start, String end){
         this.end = end;
-
+        this.visitedNode = 1;
+        this.elapsedTime = System.nanoTime();
         ArrayList<String> startPath = new ArrayList<>();
         startPath.add(start);
-        theQueue.add(new AbstractMap.SimpleEntry<>(startPath, 0.0));
+        visited.add(start);
+        theQueue.add(new Pair<>(startPath, 0.0));
 
         while(!done && !theQueue.isEmpty()){
             evaluateNextNode();
         }
 
-        if (done){
-            return solution;
-        }
-        else{
-            return new ArrayList<>();
-        }
+        this.elapsedTime = System.nanoTime() - this.elapsedTime;
     }
 
     public void evaluateNextNode(){
-        AbstractMap.SimpleEntry<List<String>, Double> currentItem = theQueue.remove();
+         Pair<List<String>, Double> currentItem = theQueue.remove();
 
-        List<String> possibilities = wg.getAdjacentWords(currentItem.getKey().getLast(), dict);
+        List<String> possibilities = wg.getAdjacentWords(currentItem.first().getLast(), dict);
+
         for(int i = 0; i < possibilities.size() && !done; i++){
-            resolveBranch(currentItem, possibilities.get(i));
+            if (!visited.contains(possibilities.get(i))){
+                resolveBranch(currentItem, possibilities.get(i));
+                visited.add(possibilities.get(i));
+                this.visitedNode += 1;
+            }
         }
     }
 
-    public void resolveBranch(AbstractMap.SimpleEntry<List<String>, Double> prev, String current){
+    public void resolveBranch(Pair<List<String>, Double> prev, String current){
         if (current.equals(end)){
             done = true;
-            solution = new ArrayList<>(prev.getKey());
+            solution = new ArrayList<>(prev.first());
             solution.add(current);
         }
         else{
-            List<String> newPath = new ArrayList<>(prev.getKey());
+            List<String> newPath = new ArrayList<>(prev.first());
             newPath.add(current);
-            AbstractMap.SimpleEntry<List<String>, Double> newItem = new AbstractMap.SimpleEntry<>(newPath, evaluateWeight(prev, current));
-            theQueue.add(newItem);
+            theQueue.add(new Pair<>(newPath, prev.second() + 1.0));
         }
     }
 
-    public double evaluateStartCost(AbstractMap.SimpleEntry<List<String>, Double> prev){
-        return prev.getValue() + 1;
+    public List<String> getSolution(){
+        return solution;
     }
 
-    public double evaluateHeuristic(String current){
-        // UCS doesn't use Heuristics
-        return 0;
+    public Long getElapsedTime(){
+        return elapsedTime;
     }
 
-    public double evaluateWeight(AbstractMap.SimpleEntry<List<String>, Double> prev, String current){
-        return evaluateStartCost(prev) + evaluateHeuristic(current);
+    public Integer getVisitedNode(){
+        return visitedNode;
     }
 }

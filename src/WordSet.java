@@ -7,9 +7,16 @@ import java.util.Scanner;
 public class WordSet implements Iterable<String> {
 
     private final HashSet<String> wordStore;
+    private static final String defaultDict = "src/resources/words_alpha.txt";
 
     public WordSet(){
         wordStore = new HashSet<>();
+        loadFile(defaultDict);
+    }
+
+    public WordSet(String txtPath){
+        wordStore = new HashSet<>();
+        loadFile(txtPath);
     }
 
     public void loadFile(String path){

@@ -33,6 +33,9 @@ public class TextDistanceCalculator {
         double distance = 0.0;
         for(int i = 0; i < text1.length(); i++){
             distance += table.get(text1.charAt(i)).get(text2.charAt(i));
+//            if (text1.charAt(i) != text2.charAt(i)) {
+//                distance += 1.0;
+//            }
         }
         return distance;
     }
@@ -82,9 +85,9 @@ public class TextDistanceCalculator {
                         writer.write("0 ");
                     }
                     else{
-                        long hitFrequency = hitTable.get(chara).get(charb)*100;
+                        long hitFrequency = hitTable.get(chara).get(charb);
                         long tryFrequency = nTable.get(chara).get(charb);
-                        writer.write(((Double)((double)tryFrequency/(double)hitFrequency)).toString());
+                        writer.write(((Double)(1000/(double)hitFrequency)).toString());
                         writer.write(" ");
                     }
                 }
@@ -99,13 +102,13 @@ public class TextDistanceCalculator {
 
     }
 
-    public static void main(String[] args){
+//    public static void main(String[] args){
 //        WordSet ws = new WordSet();
 //        ws.loadFile("src/resources/words_alpha.txt");
 
-        TextDistanceCalculator tdc = new TextDistanceCalculator();
+//        TextDistanceCalculator tdc = new TextDistanceCalculator();
 //        tdc.generateCSVTable(ws);
-        Double dist = tdc.CalculateDistance("peek", "pook");
-        System.out.println(dist);
-    }
+//        Double dist = tdc.CalculateDistance("peek", "pook");
+//        System.out.println(dist);
+//    }
 }
