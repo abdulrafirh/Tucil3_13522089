@@ -32,10 +32,8 @@ public class TextDistanceCalculator {
     public Double CalculateDistance(String text1, String text2){
         double distance = 0.0;
         for(int i = 0; i < text1.length(); i++){
-            distance += table.get(text1.charAt(i)).get(text2.charAt(i));
-//            if (text1.charAt(i) != text2.charAt(i)) {
-//                distance += 1.0;
-//            }
+//            distance += 3*table.get(text1.charAt(i)).get(text2.charAt(i));
+            if (text1.charAt(i) != text2.charAt(i)) {distance += 1;}
         }
         return distance;
     }
@@ -44,6 +42,8 @@ public class TextDistanceCalculator {
         HashMap<Character, HashMap<Character, Integer>> hitTable = new HashMap<>();
         HashMap<Character, HashMap<Character, Integer>> nTable = new HashMap<>();
         long progress = 0;
+        int minDiff = 9999;
+        int maxDiff = -9999;
 
         for (char chara = 'a'; chara <= 'z'; chara++){
             hitTable.put(chara, new HashMap<>());
@@ -85,9 +85,9 @@ public class TextDistanceCalculator {
                         writer.write("0 ");
                     }
                     else{
-                        long hitFrequency = hitTable.get(chara).get(charb);
+                        long hitFrequency = hitTable.get(chara).get(charb)*10;
                         long tryFrequency = nTable.get(chara).get(charb);
-                        writer.write(((Double)(1000/(double)hitFrequency)).toString());
+                        writer.write(((Double)Math.log10((tryFrequency/(double)hitFrequency))).toString());
                         writer.write(" ");
                     }
                 }

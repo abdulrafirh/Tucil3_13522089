@@ -3,7 +3,12 @@
 public class Main {
     public static void main(String[] args) throws Exception{
         Astar solver = new Astar();
-        solver.solve("piano", "chord");
+//        GreedyBFS solver = new GreedyBFS();
+//        UniformCostSearch solver = new UniformCostSearch();
+        try {
+            solver.solve("vile", "omen");
+        }
+        catch(Exception e){}
         System.out.println(solver.getSolution());
         System.out.printf("Ladder Length : %d\n", solver.getSolution().size());
         System.out.printf("Visited Node : %d\n", solver.getVisitedNode());

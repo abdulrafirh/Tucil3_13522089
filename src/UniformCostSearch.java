@@ -28,16 +28,24 @@ public class UniformCostSearch implements WordLadderSolver {
         this.end = end;
         this.visitedNode = 1;
         this.elapsedTime = System.nanoTime();
+
         ArrayList<String> startPath = new ArrayList<>();
         startPath.add(start);
         visited.add(start);
         theQueue.add(new Pair<>(startPath, 0.0));
+        if (start.equals(end)) {trivialCase(); return;}
 
         while(!done && !theQueue.isEmpty()){
             evaluateNextNode();
         }
 
         this.elapsedTime = System.nanoTime() - this.elapsedTime;
+    }
+
+    public void trivialCase(){
+        visitedNode = 1;
+        solution = theQueue.peek().first();
+        elapsedTime = System.nanoTime() - elapsedTime;
     }
 
     public void evaluateNextNode(){

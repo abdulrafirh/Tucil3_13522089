@@ -33,6 +33,7 @@ public class GreedyBFS implements WordLadderSolver{
         ArrayList<String> startPath = new ArrayList<>();
         startPath.add(start);
         currentItem = startPath;
+        if (start.equals(end)) {trivialCase(); return;}
 
         while(!done && !visited.contains(currentItem.getLast())){
             visited.add(currentItem.getLast());
@@ -42,8 +43,15 @@ public class GreedyBFS implements WordLadderSolver{
         this.elapsedTime = System.nanoTime() - this.elapsedTime;
         if (!done){
             currentItem.removeLast();
+            solution = currentItem;
             throw new Exception("Greedy BFS failed to get solution");
         }
+    }
+
+    public void trivialCase(){
+        visitedNode = 1;
+        solution = currentItem;
+        elapsedTime = System.nanoTime() - elapsedTime;
     }
 
     public void evaluateNextNode(){
