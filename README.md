@@ -11,5 +11,6 @@ untuk membentuk kata baru
 ## Cara Menggunakan Program
 Program dapat di run dengan menjalankan run.bat di windows atau run.sh pada linux
 
+## Contributors
 Abdul Rafi Radityo Hutomo
 13522089
