@@ -1,1 +1,2 @@
-javac -d bin -cp src/resources/flatlaf-3.4.1.jar src/Astar.java src/GreedyBFS.java src/Main.java src/Pair.java src/TextDistanceCalculator.java src/UniformCostSearch.java src/WordGenerator.java src/WordLadderSolver.java src/WordLadderSolverGUI.java src/WordSet.java
+javac -d bin src/Astar.java src/GreedyBFS.java src/Main.java src/Pair.java src/TextDistanceCalculator.java src/UniformCostSearch.java src/WordGenerator.java src/WordLadderSolver.java src/WordLadderSolverGUI.java src/WordSet.java
+java -cp bin Main

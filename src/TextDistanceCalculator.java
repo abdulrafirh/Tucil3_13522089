@@ -23,6 +23,7 @@ public class TextDistanceCalculator {
                     table.get(chara).put((char)('a' + i), Double.parseDouble(numbersStr[i]));
                 }
             }
+            txtReader.close();
         } catch (FileNotFoundException e) {
             System.out.println("Build distance table first!");
             e.printStackTrace();
