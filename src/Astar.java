@@ -26,9 +26,14 @@ public class Astar implements WordLadderSolver {
         visited = new HashSet<>();
     }
 
-    public void solve(String start, String end){
+    public void solve(String start, String end) throws Exception{
+        dict.inputHandler(start, end);
         this.end = end;
         this.visitedNode = 1;
+        this.solution = null;
+        done = false;
+        theQueue.clear();
+        visited.clear();
         this.elapsedTime = System.nanoTime();
         ArrayList<String> startPath = new ArrayList<>();
         startPath.add(start);
@@ -41,6 +46,22 @@ public class Astar implements WordLadderSolver {
         }
 
         this.elapsedTime = System.nanoTime() - this.elapsedTime;
+        if (!done){
+            solution = null;
+            throw new Exception("A* : No solution exists");
+        }
+    }
+
+    public void inputHandler(String start, String end)throws Exception{
+        if (start.length() != end.length()){
+            throw new Exception("Invalid Input : Words have different length");
+        }
+        else if(!dict.wordExist(start)){
+            throw new Exception("Invalid starting word (doesn't exist in dictionary)");
+        }
+        else if(!dict.wordExist(end)){
+            throw new Exception("Invalid ending word (doesn't exist in dictionary)");
+        }
     }
 
     public void trivialCase(){

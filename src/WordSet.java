@@ -19,6 +19,18 @@ public class WordSet implements Iterable<String> {
         loadFile(txtPath);
     }
 
+    public void inputHandler(String start, String end)throws Exception{
+        if (start.length() != end.length()){
+            throw new Exception("Invalid Input : Words have different length");
+        }
+        else if(!wordExist(start)){
+            throw new Exception("Invalid starting word (doesn't exist in dictionary)");
+        }
+        else if(!wordExist(end)){
+            throw new Exception("Invalid ending word (doesn't exist in dictionary)");
+        }
+    }
+
     public void loadFile(String path){
         try {
             File txtFile = new File(path);

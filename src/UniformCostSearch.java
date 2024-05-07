@@ -9,8 +9,8 @@ public class UniformCostSearch implements WordLadderSolver {
     // State Objects
     private String end;
     private boolean done;
-    private final PriorityQueue<Pair<List<String>, Double>> theQueue;
-    private final HashSet<String> visited;
+    private PriorityQueue<Pair<List<String>, Double>> theQueue;
+    private HashSet<String> visited;
 
     // Solution Object
     private List<String> solution;
@@ -24,9 +24,14 @@ public class UniformCostSearch implements WordLadderSolver {
         visited = new HashSet<>();
     }
 
-    public void solve(String start, String end){
+    public void solve(String start, String end) throws Exception{
+        dict.inputHandler(start, end);
         this.end = end;
         this.visitedNode = 1;
+        this.done = false;
+        this.solution = null;
+        theQueue.clear();
+        visited.clear();
         this.elapsedTime = System.nanoTime();
 
         ArrayList<String> startPath = new ArrayList<>();
@@ -39,8 +44,14 @@ public class UniformCostSearch implements WordLadderSolver {
             evaluateNextNode();
         }
 
+        if (!done){
+            solution = new ArrayList<>();
+            throw new Exception("UCS : No solution exists");
+        }
+
         this.elapsedTime = System.nanoTime() - this.elapsedTime;
     }
+
 
     public void trivialCase(){
         visitedNode = 1;

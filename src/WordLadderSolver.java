@@ -1,3 +1,5 @@
+import java.util.List;
+
 public interface WordLadderSolver {
 
     /*
@@ -9,4 +11,8 @@ public interface WordLadderSolver {
      * output word ladder chain from start to end in an instance of ArrayList<String>
      */
     void solve(String start, String end) throws Exception;
+
+    public List<String> getSolution();
+    public Long getElapsedTime();
+    public Integer getVisitedNode();
 }

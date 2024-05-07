@@ -26,7 +26,11 @@ public class GreedyBFS implements WordLadderSolver{
     }
 
     public void solve(String start, String end) throws Exception{
+        dict.inputHandler(start, end);
         this.end = end;
+        this.solution = null;
+        done = false;
+        this.visited.clear();
         this.elapsedTime = System.nanoTime();
         this.visitedNode = 0;
 
@@ -44,7 +48,7 @@ public class GreedyBFS implements WordLadderSolver{
         if (!done){
             currentItem.removeLast();
             solution = currentItem;
-            throw new Exception("Greedy BFS failed to get solution");
+            throw new Exception("Greedy BFS : failed to get solution or no solution exists");
         }
     }
 
@@ -56,6 +60,12 @@ public class GreedyBFS implements WordLadderSolver{
 
     public void evaluateNextNode(){
         List<String> possibilities = wg.getAdjacentWords(currentItem.getLast(), dict);
+
+        if(possibilities.isEmpty()){
+            currentItem.add(currentItem.getLast());
+            return;
+        }
+
         int nextIdx = 0;
         double minVal = -1;
         for(int i = 0; i < possibilities.size() && !done; i++){
