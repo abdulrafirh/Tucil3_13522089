@@ -1,10 +1,9 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 public class WordGenerator {
 
-    public List<String> getAdjacentWords(String word, WordSet dict){
-        List<String> result = new ArrayList<>();
+    public LinkedList<String> getAdjacentWords(String word, WordSet dict){
+        LinkedList<String> result = new LinkedList<>();
         for(char letter = 'a'; letter <= 'z'; letter++){
             for(int i = 0;i < word.length(); i++){
                 if (word.charAt(i) != letter){

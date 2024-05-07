@@ -1,3 +1,5 @@
+import com.formdev.flatlaf.FlatDarkLaf;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,10 +24,8 @@ public class WordLadderSolverGUI extends JFrame implements ActionListener{
     private WordLadderSolver solver;
 
     public WordLadderSolverGUI() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        super("Word Ladder Solver");
         JFrame frame = new JFrame("Word Ladder Solver");
         frame.setMinimumSize(new Dimension(1200, 800));
-        UIManager.setLookAndFeel("com.formdev.flatlaf.themes.FlatMacDarkLaf");
 
         // Create UI components
         JLabel startWordLabel = new JLabel("Start Word:");
@@ -42,7 +42,8 @@ public class WordLadderSolverGUI extends JFrame implements ActionListener{
         algorithmGroup = new ButtonGroup();
         JRadioButton uniformCostButton = new JRadioButton("Uniform Cost Search");
         JRadioButton greedyButton = new JRadioButton("Greedy Best-First Search");
-        JRadioButton astarButton = new JRadioButton("A* Search");
+        JRadioButton astarOptimalButton = new JRadioButton("A* Search (optimal)");
+        JRadioButton astarFastButton = new JRadioButton("A* Search (fast)");
 
         // Layout components
         JPanel inputPanel = new JPanel();
@@ -56,13 +57,15 @@ public class WordLadderSolverGUI extends JFrame implements ActionListener{
 
         algorithmGroup.add(uniformCostButton);
         algorithmGroup.add(greedyButton);
-        algorithmGroup.add(astarButton);
+        algorithmGroup.add(astarOptimalButton);
+        algorithmGroup.add(astarFastButton);
 
         JPanel algorithmPanel = new JPanel();
         algorithmPanel.setBorder(BorderFactory.createTitledBorder("Algorithm"));
         algorithmPanel.add(uniformCostButton);
         algorithmPanel.add(greedyButton);
-        algorithmPanel.add(astarButton);
+        algorithmPanel.add(astarOptimalButton);
+        algorithmPanel.add(astarFastButton);
 
         JScrollPane scrollPane = new JScrollPane(solutionArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -89,9 +92,15 @@ public class WordLadderSolverGUI extends JFrame implements ActionListener{
                     solver = ucs;
                 } else if (greedyButton.isSelected()) {
                     solver = gbfs;
-                } else if (astarButton.isSelected()) {
+                } else if (astarOptimalButton.isSelected()) {
+                    astar.setAdmissible(true);
                     solver = astar;
-                } else{
+                } else if (astarFastButton.isSelected()){
+                    astar.setAdmissible(false);
+                    solver = astar;
+                }
+                else{
+                    solutionArea.setText("Pick an algorithm");
                     return;
                 }
 
@@ -107,7 +116,14 @@ public class WordLadderSolverGUI extends JFrame implements ActionListener{
 
                 if (err == null){
                     List<String> solution = solver.getSolution();
-                    String additionalInfo = "\nVisited Nodes: " + solver.getVisitedNode() + "\nExecution Time: " + (double)solver.getElapsedTime()/1000000.0 + "ms";
+                    String additionalInfo = "\nPath length: " + solution.size() + "\nVisited Nodes: " + solver.getVisitedNode() + "\nExecution Time: " + (double)solver.getElapsedTime()/1000000.0 + "ms";
+
+                    StringBuilder solutionPart = new StringBuilder();
+                    for(int i = 0; i < solution.size(); i++){
+                        solutionPart.append(i + 1);
+                        solutionPart.append(". ");
+                        solutionPart.append(solution.get(i)).append("\n");
+                    }
 
                     solutionArea.setText(String.join("\n", solution) + additionalInfo);
                 }

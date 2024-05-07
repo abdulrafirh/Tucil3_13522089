@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.LinkedList;
 
 public class Astar implements WordLadderSolver {
 
@@ -10,11 +11,12 @@ public class Astar implements WordLadderSolver {
     // State Objects
     private String end;
     private boolean done;
-    private final PriorityQueue<Pair<List<String>, Double>> theQueue;
-    private final HashSet<String> visited;
+    private final PriorityQueue<Pair<LinkedList<String>, Double>> theQueue;
+    private final HashMap<String, Integer> visited;
+    private boolean admissible = true;
 
     // Solution Object
-    private List<String> solution;
+    private LinkedList<String> solution;
     private Integer visitedNode;
     private Long elapsedTime;
 
@@ -23,7 +25,7 @@ public class Astar implements WordLadderSolver {
         dict = new WordSet();
         tdc = new TextDistanceCalculator();
         theQueue = new PriorityQueue<>();
-        visited = new HashSet<>();
+        visited = new HashMap<>();
     }
 
     public void solve(String start, String end) throws Exception{
@@ -35,9 +37,9 @@ public class Astar implements WordLadderSolver {
         theQueue.clear();
         visited.clear();
         this.elapsedTime = System.nanoTime();
-        ArrayList<String> startPath = new ArrayList<>();
+        LinkedList<String> startPath = new LinkedList<>();
         startPath.add(start);
-        visited.add(start);
+        visited.put(start, 0);
         theQueue.add(new Pair<>(startPath, evaluateWeight(startPath)));
         if (start.equals(end)) {trivialCase(); return;}
 
@@ -71,37 +73,37 @@ public class Astar implements WordLadderSolver {
     }
 
     public void evaluateNextNode(){
-        Pair<List<String>, Double> currentItem = theQueue.remove();
+        Pair<LinkedList<String>, Double> currentItem = theQueue.remove();
 
-        List<String> possibilities = wg.getAdjacentWords(currentItem.first().getLast(), dict);
+        LinkedList<String> possibilities = wg.getAdjacentWords(currentItem.first().getLast(), dict);
 
         for(int i = 0; i < possibilities.size() && !done; i++){
-            if (!visited.contains(possibilities.get(i))){
+            if (currentItem.first().size() < visited.getOrDefault(possibilities.get(i), 9999)){
                 resolveBranch(currentItem, possibilities.get(i));
-                visited.add(possibilities.get(i));
+                visited.put(possibilities.get(i), currentItem.first().size());
                 this.visitedNode += 1;
             }
         }
     }
 
-    public void resolveBranch(Pair<List<String>, Double> prev, String current){
+    public void resolveBranch(Pair<LinkedList<String>, Double> prev, String current){
         if (current.equals(end)){
             done = true;
-            solution = new ArrayList<>(prev.first());
+            solution = new LinkedList<>(prev.first());
             solution.add(current);
         }
         else{
-            List<String> newPath = new ArrayList<>(prev.first());
+            LinkedList<String> newPath = new LinkedList<>(prev.first());
             newPath.add(current);
             theQueue.add(new Pair<>(newPath, evaluateWeight(newPath)));
         }
     }
 
-    public double evaluateWeight(List<String> current){
-        return current.size() - 1 + tdc.CalculateDistance(current.getLast(), end);
+    public double evaluateWeight(LinkedList<String> current){
+        return current.size() - 1 + tdc.CalculateDistance(current.getLast(), end, admissible);
     }
 
-    public List<String> getSolution(){
+    public LinkedList<String> getSolution(){
         return solution;
     }
 
@@ -111,5 +113,9 @@ public class Astar implements WordLadderSolver {
 
     public Integer getVisitedNode(){
         return visitedNode;
+    }
+
+    public void setAdmissible(boolean state){
+        admissible = state;
     }
 }

@@ -9,11 +9,11 @@ public class UniformCostSearch implements WordLadderSolver {
     // State Objects
     private String end;
     private boolean done;
-    private PriorityQueue<Pair<List<String>, Double>> theQueue;
+    private PriorityQueue<Pair<LinkedList<String>, Double>> theQueue;
     private HashSet<String> visited;
 
     // Solution Object
-    private List<String> solution;
+    private LinkedList<String> solution;
     private Integer visitedNode;
     private Long elapsedTime;
 
@@ -34,7 +34,7 @@ public class UniformCostSearch implements WordLadderSolver {
         visited.clear();
         this.elapsedTime = System.nanoTime();
 
-        ArrayList<String> startPath = new ArrayList<>();
+        LinkedList<String> startPath = new LinkedList<>();
         startPath.add(start);
         visited.add(start);
         theQueue.add(new Pair<>(startPath, 0.0));
@@ -45,7 +45,7 @@ public class UniformCostSearch implements WordLadderSolver {
         }
 
         if (!done){
-            solution = new ArrayList<>();
+            solution = new LinkedList<>();
             throw new Exception("UCS : No solution exists");
         }
 
@@ -60,9 +60,9 @@ public class UniformCostSearch implements WordLadderSolver {
     }
 
     public void evaluateNextNode(){
-         Pair<List<String>, Double> currentItem = theQueue.remove();
+         Pair<LinkedList<String>, Double> currentItem = theQueue.remove();
 
-        List<String> possibilities = wg.getAdjacentWords(currentItem.first().getLast(), dict);
+        LinkedList<String> possibilities = wg.getAdjacentWords(currentItem.first().getLast(), dict);
 
         for(int i = 0; i < possibilities.size() && !done; i++){
             if (!visited.contains(possibilities.get(i))){
@@ -73,20 +73,20 @@ public class UniformCostSearch implements WordLadderSolver {
         }
     }
 
-    public void resolveBranch(Pair<List<String>, Double> prev, String current){
+    public void resolveBranch(Pair<LinkedList<String>, Double> prev, String current){
         if (current.equals(end)){
             done = true;
-            solution = new ArrayList<>(prev.first());
+            solution = new LinkedList<>(prev.first());
             solution.add(current);
         }
         else{
-            List<String> newPath = new ArrayList<>(prev.first());
+            LinkedList<String> newPath = new LinkedList<>(prev.first());
             newPath.add(current);
             theQueue.add(new Pair<>(newPath, prev.second() + 1.0));
         }
     }
 
-    public List<String> getSolution(){
+    public LinkedList<String> getSolution(){
         return solution;
     }
 

@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.LinkedList;
+
 
 public class GreedyBFS implements WordLadderSolver{
 
@@ -10,11 +12,11 @@ public class GreedyBFS implements WordLadderSolver{
     // State Object
     private String end;
     private boolean done;
-    private List<String> currentItem;
+    private LinkedList<String> currentItem;
     private final HashSet<String> visited;
 
     // Solution
-    private List<String> solution;
+    private LinkedList<String> solution;
     private Integer visitedNode;
     private Long elapsedTime;
 
@@ -34,7 +36,7 @@ public class GreedyBFS implements WordLadderSolver{
         this.elapsedTime = System.nanoTime();
         this.visitedNode = 0;
 
-        ArrayList<String> startPath = new ArrayList<>();
+        LinkedList<String> startPath = new LinkedList<>();
         startPath.add(start);
         currentItem = startPath;
         if (start.equals(end)) {trivialCase(); return;}
@@ -59,7 +61,7 @@ public class GreedyBFS implements WordLadderSolver{
     }
 
     public void evaluateNextNode(){
-        List<String> possibilities = wg.getAdjacentWords(currentItem.getLast(), dict);
+        LinkedList<String> possibilities = wg.getAdjacentWords(currentItem.getLast(), dict);
 
         if(possibilities.isEmpty()){
             currentItem.add(currentItem.getLast());
@@ -90,7 +92,7 @@ public class GreedyBFS implements WordLadderSolver{
         return tdc.CalculateDistance(current, end);
     }
 
-    public List<String> getSolution(){
+    public LinkedList<String> getSolution(){
         return solution;
     }
 

@@ -8,7 +8,7 @@ public interface WordLadderSolver {
      * end       : ending Word
      *
      * @output
-     * output word ladder chain from start to end in an instance of ArrayList<String>
+     * output word ladder chain from start to end in an instance of LinkedList<String>
      */
     void solve(String start, String end) throws Exception;
 

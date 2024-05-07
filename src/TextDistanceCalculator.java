@@ -32,8 +32,17 @@ public class TextDistanceCalculator {
     public Double CalculateDistance(String text1, String text2){
         double distance = 0.0;
         for(int i = 0; i < text1.length(); i++){
-//            distance += 3*table.get(text1.charAt(i)).get(text2.charAt(i));
-            if (text1.charAt(i) != text2.charAt(i)) {distance += 1;}
+//            if (text1.charAt(i) != text2.charAt(i)) {distance += 1;}
+            distance += table.get(text1.charAt(i)).get(text2.charAt(i));
+        }
+        return distance;
+    }
+
+    public Double CalculateDistance(String text1, String text2, boolean admissible){
+        double distance = 0.0;
+        for(int i = 0; i < text1.length(); i++){
+            if (!admissible) {distance += 3*table.get(text1.charAt(i)).get(text2.charAt(i));}
+            else {if (text1.charAt(i) != text2.charAt(i)) {distance += 1;}}
         }
         return distance;
     }
