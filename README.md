@@ -6,7 +6,7 @@ Word Ladder adalah sebuah permainan yang bertujuan untuk mencapai ending word da
 untuk membentuk kata baru
 
 ## Requirements
-1. Java Development kit
+1. Java Development kit 17
    
 ## Cara Menggunakan Program
 Program dapat di run dengan menjalankan run.bat di windows atau run.sh pada linux
